@@ -1,12 +1,203 @@
 /* styles.css */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
+    background-color: #121212;
+    /* Dark background */
+    color: #e0e0e0;
+    /* Light text */
+}
+
+.navbar {
+    background-color: #1f1f1f;
+    /* Darker navbar */
+    padding: 10px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    /* Darker shadow */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #bb86fc;
+    /* Light purple text */
+}
+
+.navbar-links a {
+    color: #bb86fc;
+    /* Light purple text */
+    padding: 10px 15px;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.navbar-links a:hover {
+    color: #3700b3;
+    /* Darker shade of purple */
 }
 
 h1 {
     text-align: center;
     margin-top: 20px;
+    font-size: 24px;
+    font-weight: 600;
+    color: #bb86fc;
+    /* Light purple text */
+}
+
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+#main-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+#top-row {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+#date-box,
+#pomodoro-timer,
+#todo-list {
+    width: 28%;
+    /* Reduced width */
+    height: 250px;
+    /* Fixed height */
+    background-color: #1f1f1f;
+    /* Darker box background */
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    /* Darker shadow */
+    text-align: center;
+    margin-bottom: 20px;
+    /* Space below each box */
+}
+
+.date-large {
+    font-size: 60px;
+    /* Increase font size for the date */
+    margin-bottom: 5px;
+}
+
+.date-small {
+    font-size: 20px;
+    /* Keep the same size for month and year */
+}
+
+.task-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.task-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #424242;
+    /* Darker border */
+}
+
+.task-item input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.timer-buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 10px;
+}
+
+.button {
+    font-size: 24px;
+    background-color: #bb86fc;
+    /* Light purple button */
+    color: #121212;
+    /* Dark text on button */
+    border: none;
+    border-radius: 5px;
+}
+
+#bottom-row {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+#hourly-todo-container {
+    width: 28%;
+    /* Reduced width */
+    min-height: calc(100vh - 300px);
+    /* Extend to bottom of page */
+    background-color: #1f1f1f;
+    /* Darker background */
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    /* Darker shadow */
+    margin-bottom: 20px;
+    margin-right: 20px;
+    /* Increase gap */
+}
+
+.hourly-task {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #424242;
+    /* Darker border */
+    padding: 5px 0;
+}
+
+#other-tasks-container {
+    width: 68%;
+    /* Increased width */
+    background-color: #1f1f1f;
+    /* Darker background */
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    /* Darker shadow */
+    margin-bottom: 20px;
+}
+
+#other-tasks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: space-between;
+}
+
+.task-box {
+    width: calc(30% - 10px);
+    background-color: #333333;
+    /* Darker box background */
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    /* Darker shadow */
+}
+
+footer {
+    background-color: #1f1f1f;
+    /* Darker background */
+    color: #e0e0e0;
+    /* Light text */
+    text-align: center;
+    padding: 10px 20px;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.3);
+    /* Darker shadow */
 }
