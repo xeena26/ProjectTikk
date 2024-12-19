@@ -1,18 +1,99 @@
-<!-- calendar.html -->
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calendar</title>
+    <title>Annual Calendar</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 
 <body>
-    <h1>Calendar</h1>
-    <div id="calendar"></div>
-    <!-- Add your calendar structure here -->
+    <div class="container my-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <button class="btn btn-primary" id="prevYear">← Previous Year</button>
+            <h1 id="yearDisplay"></h1>
+            <button class="btn btn-primary" id="nextYear">Next Year →</button>
+        </div>
+        <div id="calendar" class="row"></div>
+    </div>
+
+    <script>
+        const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        let currentYear = new Date().getFullYear();
+
+        function generateCalendar(year) {
+            const calendarContainer = document.getElementById('calendar');
+            calendarContainer.innerHTML = '';
+            document.getElementById('yearDisplay').innerText = year;
+
+            for (let i = 0; i < months.length; i += 3) {
+                const row = document.createElement('div');
+                row.className = 'row mb-4';
+
+                for (let j = i; j < i + 3; j++) {
+                    const col = document.createElement('div');
+                    col.className = 'col-md-4';
+                    col.innerHTML = `
+                        <div class="card">
+                            <div class="card-header text-center">
+                                <h5>${months[j]}</h5>
+                            </div>
+                            <div class="card-body">
+                                ${generateMonthCalendar(year, j)}
+                            </div>
+                        </div>
+                    `;
+                    row.appendChild(col);
+                }
+                calendarContainer.appendChild(row);
+            }
+        }
+
+        function generateMonthCalendar(year, month) {
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            let calendarHTML = '<table class="table table-bordered"><thead><tr>';
+
+            ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].forEach(day => {
+                calendarHTML += `<th class="text-center">${day}</th>`;
+            });
+            calendarHTML += '</tr></thead><tbody><tr>';
+
+            for (let i = 0; i < firstDay; i++) {
+                calendarHTML += '<td></td>';
+            }
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                if ((day + firstDay - 1) % 7 === 0 && day !== 1) {
+                    calendarHTML += '</tr><tr>';
+                }
+                calendarHTML += `<td class="text-center">${day}</td>`;
+            }
+
+            calendarHTML += '</tr></tbody></table>';
+            return calendarHTML;
+        }
+
+        document.getElementById('prevYear').addEventListener('click', () => {
+            currentYear--;
+            generateCalendar(currentYear);
+        });
+
+        document.getElementById('nextYear').addEventListener('click', () => {
+            currentYear++;
+            generateCalendar(currentYear);
+        });
+
+        window.onload = () => {
+            generateCalendar(currentYear);
+        };
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 
 </html>

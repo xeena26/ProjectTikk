@@ -1,4 +1,3 @@
-/* styles.css */
 body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     margin: 0;
@@ -7,6 +6,7 @@ body {
     /* Dark background */
     color: #e0e0e0;
     /* Light text */
+    height: 100vh;
 }
 
 .navbar {
@@ -55,6 +55,44 @@ h1 {
     padding: 20px;
 }
 
+.card {
+    background-color: #1f1f1f;
+    /* Darker background */
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    /* Darker shadow */
+    margin-bottom: 20px;
+}
+
+.card-body {
+    padding: 0;
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    margin-bottom: 0;
+}
+
+.table th,
+.table td {
+    padding: 0.5rem;
+    text-align: center;
+    vertical-align: middle;
+}
+
+footer {
+    background-color: #1f1f1f;
+    /* Darker background */
+    color: #e0e0e0;
+    /* Light text */
+    text-align: center;
+    padding: 10px 20px;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.3);
+    /* Darker shadow */
+}
+
 #main-content {
     display: flex;
     flex-wrap: wrap;
@@ -93,8 +131,14 @@ h1 {
 }
 
 .date-small {
-    font-size: 20px;
+    font-size: 24px;
     /* Keep the same size for month and year */
+}
+
+.time {
+    font-size: 20px;
+    /* Adjust the size as needed */
+    margin-top: 5px;
 }
 
 .task-form {
@@ -115,26 +159,90 @@ h1 {
     margin-right: 10px;
 }
 
+.task-item input[type="text"] {
+    flex-grow: 1;
+    /* Allow the text input to take up remaining space */
+    margin-left: 10px;
+    /* Add some space between checkbox and text input */
+}
+
+.hourly-task {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #424242;
+    /* Darker border */
+    padding: 5px 0;
+}
+
+.hourly-task input[type="text"] {
+    width: calc(100% - 60px);
+    /* Ensure all fields have the same width */
+    margin-left: 10px;
+    /* Add some space between label and text input */
+    box-sizing: border-box;
+    /* Include padding and border in the element's total width and height */
+}
+
 .timer-buttons {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
+    /* Ensure the buttons are centered and horizontal */
+    gap: 20px;
+    /* Add gap between the buttons */
     margin-bottom: 10px;
 }
 
 .button {
-    font-size: 24px;
-    background-color: #bb86fc;
-    /* Light purple button */
-    color: #121212;
-    /* Dark text on button */
+    font-size: 20px;
+    /* Smaller font size */
+    padding: 10px 20px;
+    /* Adjusted padding */
     border: none;
-    border-radius: 5px;
+    /* Remove borders */
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    /* Ensure the symbols are white */
+    background: none;
+    /* Remove default button styling */
+}
+
+.button svg {
+    color: white;
+    /* Ensure SVG symbols are white */
+}
+
+.start-button {
+    background-color: #4CAF50;
+    /* Green */
+}
+
+.pause-button {
+    background-color: #FFC107;
+    /* Amber */
+}
+
+.reset-button {
+    background-color: #F44336;
+    /* Red */
+}
+
+.timer {
+    font-size: 60px;
+    /* Slightly smaller font size for the timer */
+    margin-top: 20px;
 }
 
 #bottom-row {
     display: flex;
     width: 100%;
     justify-content: space-between;
+    gap: 20px;
+    /* Add gap between the containers */
 }
 
 #hourly-todo-container {
@@ -149,17 +257,15 @@ h1 {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     /* Darker shadow */
     margin-bottom: 20px;
-    margin-right: 20px;
-    /* Increase gap */
+    text-align: center;
+    /* Center-align the heading */
 }
 
-.hourly-task {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid #424242;
-    /* Darker border */
-    padding: 5px 0;
+#hourly-todo-container .highlight {
+    background-color: #bb86fc;
+    /* Highlight color */
+    color: #000;
+    /* Text color */
 }
 
 #other-tasks-container {
@@ -172,6 +278,8 @@ h1 {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     /* Darker shadow */
     margin-bottom: 20px;
+    text-align: center;
+    /* Center-align the heading */
 }
 
 #other-tasks {
@@ -183,21 +291,219 @@ h1 {
 
 .task-box {
     width: calc(30% - 10px);
+    height: 230px;
     background-color: #333333;
     /* Darker box background */
     padding: 10px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     /* Darker shadow */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-footer {
+.image-box {
+    width: 100%;
+    height: 100px;
+    /* Adjust height as needed */
+    margin-bottom: 10px;
+    background-color: #444444;
+    /* Slightly darker background */
+    border-radius: 5px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-box img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+}
+
+.small-task-form {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.small-task-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.small-task-item input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+.small-task-item input[type="text"] {
+    flex-grow: 1;
+    /* Allow the text input to take up remaining space */
+    font-size: 12px;
+    /* Smaller font size for the text input */
+    margin-left: 5px;
+    /* Add some space between checkbox and text input */
+}
+
+/* Additional styles for calendar and login pages */
+#calendar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+#calendar .col-md-4 {
+    margin-bottom: 20px;
+}
+
+.card .card-header {
     background-color: #1f1f1f;
-    /* Darker background */
+    /* Darker card header */
+    color: #bb86fc;
+    /* Light purple text */
+    border-bottom: 1px solid #424242;
+    /* Darker border */
+}
+
+.table th,
+.table td {
     color: #e0e0e0;
     /* Light text */
-    text-align: center;
-    padding: 10px 20px;
-    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.card .card-body {
+    padding: 5px;
+}
+
+.btn-primary {
+    background-color: #6200ea;
+    border-color: #6200ea;
+}
+
+.btn-primary:hover {
+    background-color: #3700b3;
+    border-color: #3700b3;
+}
+
+a {
+    color: #bb86fc;
+}
+
+a:hover {
+    color: #3700b3;
+    text-decoration: none;
+}
+
+#login-form {
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+    background-color: #1f1f1f;
+    /* Darker background */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     /* Darker shadow */
+}
+
+#login-form h1 {
+    color: #bb86fc;
+    /* Light purple text */
+}
+
+#login-form .form-group {
+    margin-bottom: 20px;
+}
+
+#login-form .form-control {
+    background-color: #333;
+    border: 1px solid #424242;
+    /* Darker border */
+    color: #e0e0e0;
+    /* Light text */
+}
+
+#login-form .btn-primary {
+    width: 100%;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+#calendar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+#calendar .col-md-4 {
+    margin-bottom: 20px;
+}
+
+.card {
+    background-color: #1f1f1f;
+    /* Darker card background */
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    /* Darker shadow */
+    margin-bottom: 20px;
+}
+
+.card .card-header {
+    background-color: #333333;
+    /* Slightly lighter than the card */
+    color: #bb86fc;
+    /* Light purple text */
+    border-bottom: 1px solid #424242;
+    /* Darker border */
+    padding: 10px;
+}
+
+.card .card-body {
+    padding: 10px;
+}
+
+.table th,
+.table td {
+    color: #e0e0e0;
+    /* Light text */
+    border: 1px solid #424242;
+    /* Darker border */
+    text-align: center;
+    /* Center-align text */
+}
+
+.table th {
+    background-color: #333333;
+    /* Slightly lighter background */
+}
+
+.table-bordered {
+    border: 1px solid #424242;
+    /* Darker border for the table */
+}
+
+.btn-primary {
+    background-color: #6200ea;
+    border-color: #6200ea;
+}
+
+.btn-primary:hover {
+    background-color: #3700b3;
+    border-color: #3700b3;
+}
+
+a {
+    color: #bb86fc;
+}
+
+a:hover {
+    color: #3700b3;
+    text-decoration: none;
 }

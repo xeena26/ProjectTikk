@@ -73,10 +73,17 @@ def register():
     print(users)
 
     return render_template('register.html', title='Register', form=form)
-    return render_template('register.html', title='Register', form=form)
 
+@app.route('/calendar')
+@login_required
+def calendar():
+    # Render calendar.html
+    return render_template('calendar.html')
 
-
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('register'))
 
 @app.route('/add_task', methods=['POST'])
 @login_required

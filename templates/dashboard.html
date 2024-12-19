@@ -12,10 +12,11 @@
     <nav class="navbar">
         <div class="navbar-logo">Tikk</div>
         <div class="navbar-links">
-            <a href="#">Home</a>
-            <a href="#">Logout</a>
+            <a href="{{ url_for('calendar') }}">Calendar</a>
+            <a href="{{ url_for('login') }}">Logout</a>
         </div>
     </nav>
+
     <div class="container">
         <h1>Dashboard</h1>
         <main id="main-content">
@@ -23,30 +24,34 @@
                 <section id="date-box" class="card">
                     <p id="today-date" class="date-large"></p>
                     <p id="today-month-year" class="date-small"></p>
+                    <p id="current-time" class="time"></p>
                 </section>
                 <section id="todo-list" class="card">
                     <h2>To-Do List</h2>
                     <form action="{{ url_for('add_task') }}" method="POST" class="task-form">
                         {% for i in range(5) %}
-                        <div class="task-item">
+                        <div class="task-item" draggable="true" ondragstart="drag(event)" data-id="{{i}}">
                             <input type="checkbox" name="task_{{i}}">
-                            <input type="text" name="title_{{i}}" placeholder="New Task">
+                            <input type="text" name="title_{{i}}" placeholder="New Task"
+                                onkeypress="storeInput(event, this)">
                         </div>
                         {% endfor %}
                     </form>
                 </section>
                 <section id="pomodoro-timer" class="card">
                     <h2>Pomodoro Timer</h2>
-                    <div class="timer-buttons">
-                        <button class="button pause-button" onclick="pauseTimer()">⏸️</button>
-                        <button class="button play-button" onclick="startTimer()">▶️</button>
-                        <button class="button stop-button" onclick="resetTimer()">⏹️</button>
+                    <div class="timer-container">
+                        <div class="timer" id="time">25:00</div>
+                        <div class="timer-buttons">
+                            <button class="button start-button" id="start">▶️</button>
+                            <button class="button pause-button" id="pause">⏸️</button>
+                            <button class="button reset-button" id="reset">⏹️</button>
+                        </div>
                     </div>
-                    <div id="timer">25:00</div>
                 </section>
             </section>
             <section id="bottom-row" class="row">
-                <aside id="hourly-todo-container" class="card">
+                <aside id="hourly-todo-container" class="card" ondrop="drop(event)" ondragover="allowDrop(event)">
                     <h2>Hourly To-Do</h2>
                     <div id="hourly-tasks">
                         {% for hour in ['12 AM', '1 AM', '2 AM', '3 AM', '4 AM', '5 AM', '6 AM', '7 AM', '8 AM', '9 AM',
@@ -54,7 +59,8 @@
                         PM', '10 PM', '11 PM'] %}
                         <div class="hourly-task">
                             <label for="hour-{{ hour }}">{{ hour }}:</label>
-                            <input type="text" id="hour-{{ hour }}" name="hour-{{ hour }}">
+                            <input type="text" id="hour-{{ hour }}" name="hour-{{ hour }}" ondrop="dropOnInput(event)"
+                                ondragover="allowDrop(event)">
                         </div>
                         {% endfor %}
                     </div>
@@ -65,85 +71,157 @@
                         {% for i in range(9) %}
                         <div class="task-box">
                             <h3>Title {{ i+1 }}</h3>
-                            <img src="{{ url_for('static', filename='example.jpg') }}" alt="Example Image">
+                            <div class="image-box" id="image-box-{{i}}">
+                                <img src="{{ url_for('static', filename='example.jpg') }}" alt="Image {{i+1}}"
+                                    class="task-image">
+                            </div>
+                            <form class="small-task-form">
+                                {% for j in range(3) %}
+                                <div class="small-task-item">
+                                    <input type="checkbox" name="small_task_{{i}}_{{j}}">
+                                    <input type="text" name="small_title_{{i}}_{{j}}" placeholder="Sub-task {{j+1}}">
+                                </div>
+                                {% endfor %}
+                            </form>
                         </div>
                         {% endfor %}
                     </div>
                 </section>
             </section>
-        </main>
-        <section id="idea-overflow" class="card section">
-            <h2>Idea Overflow</h2>
-            <p>Your overflow of ideas here...</p>
-        </section>
-        <section id="for-tomorrow" class="card section">
-            <h2>For Tomorrow</h2>
-            <p>Your tasks for tomorrow here...</p>
-        </section>
-    </div>
-    <footer>
-        &copy; 2023 Tikk. All rights reserved.
-    </footer>
-    <script>
-        // Display today's date
-        const today = new Date();
-        document.getElementById('today-date').innerText = today.toLocaleDateString('en-GB', { day: 'numeric' });
-        document.getElementById('today-month-year').innerText = today.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' });
 
+            <!-- Side by Side Containers -->
+            <div class="side-by-side">
+                <!-- Container around Idea Overflow -->
+                <section id="idea-overflow" class="card idea-overflow">
+                    <h2>Idea Overflow</h2>
+                    <p>Your overflow of ideas here...</p>
+                </section>
+
+                <!-- Container around For Tomorrow -->
+                <section id="for-tomorrow" class="card for-tomorrow">
+                    <h2>For Tomorrow</h2>
+                    <p>Your tasks for tomorrow here...</p>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        &copy; 2024 Tikk. All rights reserved.
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Display today's date
+            const today = new Date();
+            document.getElementById('today-date').innerText = today.toLocaleDateString('en-GB', { day: 'numeric' });
+            document.getElementById('today-month-year').innerText = today.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' });
+
+            // Function to update the current time
+            function updateTime() {
+                const now = new Date();
+                document.getElementById('current-time').innerText = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            }
+
+            // Initial call to display time immediately
+            updateTime();
+            // Update time every second
+            setInterval(updateTime, 1000);
+
+            // Highlight current hour function
+            function highlightCurrentHour() {
+                const now = new Date();
+                const currentHour = now.getHours();
+                const allInputs = document.querySelectorAll('#hourly-tasks input[type="text"]');
+                allInputs.forEach((input, index) => {
+                    const label = input.previousElementSibling;
+                    const hour = parseInt(label.innerText.split(' ')[0]) % 12 + (label.innerText.includes('PM') ? 12 : 0);
+                    if (hour === currentHour || (hour === 0 && currentHour === 12)) {
+                        input.classList.add('highlight');
+                    } else {
+                        input.classList.remove('highlight');
+                    }
+                });
+            }
+
+            // Initial highlight
+            highlightCurrentHour();
+            // Update highlight every minute
+            setInterval(highlightCurrentHour, 60000);
+        });
+
+        // Pomodoro Timer Script
         let timer;
-        let timeLeft = 1500; // 25 minutes in seconds
+        let time = 1500; // 25 minutes in seconds
+        let isRunning = false;
+
+        const startButton = document.getElementById('start');
+        const pauseButton = document.getElementById('pause');
+        const resetButton = document.getElementById('reset');
+
+        function updateTimer() {
+            const minutes = Math.floor(time / 60);
+            const seconds = time % 60;
+            document.getElementById('time').innerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
 
         function startTimer() {
-            timer = setInterval(() => {
-                if (timeLeft <= 0) {
-                    clearInterval(timer);
-                    alert("Time's up!");
-                } else {
-                    timeLeft--;
-                    document.getElementById('timer').innerText = formatTime(timeLeft);
-                }
-            }, 1000);
+            if (!isRunning) {
+                timer = setInterval(() => {
+                    if (time > 0) {
+                        time--;
+                        updateTimer();
+                    } else {
+                        clearInterval(timer);
+                        alert('Time\'s up!');
+                    }
+                }, 1000);
+                isRunning = true;
+            }
         }
 
         function pauseTimer() {
-            clearInterval(timer);
+            if (isRunning) {
+                clearInterval(timer);
+                isRunning = false;
+            }
         }
 
         function resetTimer() {
             clearInterval(timer);
-            timeLeft = 1500;
-            document.getElementById('timer').innerText = formatTime(timeLeft);
+            time = 1500;
+            updateTimer();
+            isRunning = false;
         }
 
-        function formatTime(seconds) {
-            const minutes = Math.floor(seconds / 60);
-            const remainingSeconds = seconds % 60;
-            return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+        startButton.addEventListener('click', startTimer);
+        pauseButton.addEventListener('click', pauseTimer);
+        resetButton.addEventListener('click', resetTimer);
+
+        updateTimer(); // Initialize the timer display
+
+        // Drag and Drop Functionality
+        function allowDrop(event) {
+            event.preventDefault();
         }
 
-        document.addEventListener('DOMContentLoaded', function () {
-            const taskForm = document.querySelector('form[action="{{ url_for('add_task') }}"]');
-            taskForm.addEventListener('submit', function (event) {
-                event.preventDefault();
-                const formData = new FormData(taskForm);
-                fetch(taskForm.action, { method: taskForm.method, body: formData })
-                    .then(response => response.text())
-                    .then(data => {
-                        document.getElementById('task-list').innerHTML = data;
-                    });
-            });
+        function drag(event) {
+            event.dataTransfer.setData("text/plain", event.target.querySelector('input[type="text"]').value);
+        }
 
-            document.querySelectorAll('form[action*="/delete_task"]').forEach(form => {
-                form.addEventListener('submit', function (event) {
-                    event.preventDefault();
-                    fetch(form.action, { method: form.method, body: new FormData(form) })
-                        .then(response => response.text())
-                        .then(data => {
-                            document.getElementById('task-list').innerHTML = data;
-                        });
-                });
-            });
-        });
+        function dropOnInput(event) {
+            event.preventDefault();
+            const data = event.dataTransfer.getData("text/plain");
+            event.target.value = data;
+        }
+
+        // Store input value when pressing enter
+        function storeInput(event, input) {
+            if (event.key === 'Enter') {
+                input.setAttribute('value', input.value);
+                event.preventDefault(); // Prevents form submission
+            }
+        }
     </script>
 </body>
 
