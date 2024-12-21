@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, current_user, logout_user, login_required
 from flask_migrate import Migrate
@@ -51,7 +51,6 @@ def login():
             flash('Login Unsuccessful. Please check username and password', 'danger')
     return render_template('login.html', title='Login', form=form)
 
-
 @app.route('/dashboard', methods=['GET', 'POST'])
 @login_required
 def dashboard():
@@ -77,7 +76,6 @@ def register():
 @app.route('/calendar')
 @login_required
 def calendar():
-    # Render calendar.html
     return render_template('calendar.html')
 
 @app.route('/logout')
@@ -126,6 +124,18 @@ def delete_task(task_id):
     db.session.commit()
     flash('Task deleted successfully!', 'success')
     return redirect(url_for('dashboard'))
+
+@app.route('/update_tasks', methods=['POST'])
+@login_required
+def update_tasks():
+    updated_tasks = request.json.get('tasks')
+    for updated_task in updated_tasks:
+        task = Task.query.get(updated_task['id'])
+        if task and task.user_id == current_user.id:
+            task.title = updated_task['title']
+            task.completed = updated_task['completed']
+    db.session.commit()
+    return jsonify({"status": "success"})
 
 if __name__ == '__main__':
     app.run(debug=True)
