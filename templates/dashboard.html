@@ -6,6 +6,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        /* Updated CSS */
+        .task-form {
+            max-height: 200px;
+            /* Fixed height for the container */
+            overflow-y: auto;
+            /* Enable scrolling */
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            /* Smaller font size */
+            margin-bottom: 5px;
+        }
+
+        .task-item input[type="text"] {
+            font-size: 12px;
+            /* Smaller font size */
+            padding: 4px;
+            margin-left: 5px;
+        }
+
+        .task-item input[type="checkbox"] {
+            transform: scale(0.8);
+            /* Smaller checkbox */
+        }
+
+        #add-task-button {
+            font-size: 12px;
+            /* Smaller font size */
+            padding: 4px 8px;
+            margin-top: 5px;
+            display: block;
+        }
+    </style>
 </head>
 
 <body>
@@ -31,12 +68,23 @@
                 <div id="todo-list" class="card">
                     <h2>To-Do List</h2>
                     <form id="task-form" action="{{ url_for('add_task') }}" method="POST" class="task-form">
+                        {% if tasks %}
                         {% for task in tasks %}
                         <div class="task-item" draggable="true" data-id="{{ task.id }}">
                             <input type="checkbox" name="task_{{ task.id }}" {% if task.completed %}checked{% endif %}>
-                            <input type="text" name="title_{{ task.id }}" value="{{ task.title }}" placeholder="New Task">
+                            <input type="text" name="title_{{ task.id }}" value="{{ task.title }}"
+                                placeholder="New Task">
                         </div>
                         {% endfor %}
+                        {% else %}
+                        {% for i in range(4) %}
+                        <div class="task-item" draggable="true">
+                            <input type="checkbox" name="task_new_{{ i }}">
+                            <input type="text" name="title_new_{{ i }}" placeholder="New Task">
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                        <button type="button" id="add-task-button">+</button>
                     </form>
                 </div>
                 <div id="pomodoro-timer" class="card">
@@ -58,7 +106,7 @@
                         {% for hour in ['12 AM', '1 AM', '2 AM', '3 AM', '4 AM', '5 AM', '6 AM', '7 AM', '8 AM', '9 AM',
                         '10 AM', '11 AM', '12 PM', '1 PM', '2 PM', '3 PM', '4 PM', '5 PM', '6 PM', '7 PM', '8 PM', '9
                         PM', '10 PM', '11 PM'] %}
-                        <div class="hourly-task">
+                        <div class="hourly-task" draggable="true">
                             <label for="hour-{{ hour }}">{{ hour }}:</label>
                             <input type="text" id="hour-{{ hour }}" name="hour-{{ hour }}">
                         </div>
@@ -203,9 +251,15 @@
         updateTimer(); // Initialize the timer display
 
         // Drag and Drop Functionality
+        let draggedElement = null;
+        let draggedText = '';
+
         function handleDragStart(e) {
+            // Get the text from the input field being dragged
+            draggedElement = e.target.querySelector('input[type="text"]');
+            draggedText = draggedElement.value;
             e.target.classList.add('dragging');
-            e.dataTransfer.setData('text/html', e.target.outerHTML);
+            e.dataTransfer.setData('text/plain', draggedText);
         }
 
         function handleDragEnd(e) {
@@ -214,29 +268,21 @@
 
         function handleDrop(e) {
             e.preventDefault();
-            const data = e.dataTransfer.getData('text/html');
-            e.target.classList.remove('drop-target');
-            const newElement = document.createElement('div');
-            newElement.innerHTML = data;
-            const draggableElement = newElement.firstChild;
-            draggableElement.classList.remove('dragging');
-            draggableElement.addEventListener('dragstart', handleDragStart);
-            draggableElement.addEventListener('dragend', handleDragEnd);
-            e.target.closest('.task-form').appendChild(draggableElement);
+            const dropTarget = e.target.closest('.hourly-task, .task-item, .small-task-item');
 
-            // Update the task order on the server
-            const updatedTasks = Array.from(document.querySelectorAll('.task-item')).map(item => ({
-                id: parseInt(item.dataset.id),
-                title: item.querySelector('input[type="text"]').value,
-                completed: item.querySelector('input[type="checkbox"]').checked
-            }));
-            fetch('/update_tasks', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ tasks: updatedTasks })
-            });
+            if (dropTarget && draggedText) {
+                // Set the text of the target input field
+                const inputField = dropTarget.querySelector('input[type="text"]');
+                if (inputField) {
+                    inputField.value = draggedText;
+                    // Clear the text from the original field
+                    if (draggedElement) {
+                        draggedElement.value = '';
+                    }
+                }
+                draggedText = '';
+                draggedElement = null;
+            }
         }
 
         function handleDragOver(e) {
@@ -248,15 +294,31 @@
             e.target.classList.remove('drop-target');
         }
 
-        document.querySelectorAll('.task-item, .small-task-item').forEach(item => {
+        document.querySelectorAll('.task-item, .small-task-item, .hourly-task').forEach(item => {
             item.addEventListener('dragstart', handleDragStart);
             item.addEventListener('dragend', handleDragEnd);
         });
 
-        document.querySelectorAll('.task-form, .small-task-form').forEach(form => {
+        document.querySelectorAll('.task-form, .small-task-form, #hourly-tasks').forEach(form => {
             form.addEventListener('dragover', handleDragOver);
             form.addEventListener('dragleave', handleDragLeave);
             form.addEventListener('drop', handleDrop);
+        });
+
+        // Function to dynamically add new task fields
+        document.getElementById('add-task-button').addEventListener('click', function () {
+            const taskForm = document.getElementById('task-form');
+            const newIndex = taskForm.querySelectorAll('.task-item').length;
+            const newTask = document.createElement('div');
+            newTask.classList.add('task-item');
+            newTask.setAttribute('draggable', 'true');
+            newTask.innerHTML = `
+                <input type="checkbox" name="task_new_${newIndex}">
+                <input type="text" name="title_new_${newIndex}" placeholder="New Task">
+            `;
+            newTask.addEventListener('dragstart', handleDragStart);
+            newTask.addEventListener('dragend', handleDragEnd);
+            taskForm.insertBefore(newTask, document.getElementById('add-task-button'));
         });
 
         // Store input value when pressing enter
