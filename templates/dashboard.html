@@ -198,136 +198,136 @@
             highlightCurrentHour();
             // Update highlight every minute
             setInterval(highlightCurrentHour, 60000);
-        });
 
-        // Pomodoro Timer Script
-        let timer;
-        let time = 1500; // 25 minutes in seconds
-        let isRunning = false;
+            // Pomodoro Timer Script
+            let timer;
+            let time = 1500; // 25 minutes in seconds
+            let isRunning = false;
 
-        const startButton = document.getElementById('start');
-        const pauseButton = document.getElementById('pause');
-        const resetButton = document.getElementById('reset');
+            const startButton = document.getElementById('start');
+            const pauseButton = document.getElementById('pause');
+            const resetButton = document.getElementById('reset');
 
-        function updateTimer() {
-            const minutes = Math.floor(time / 60);
-            const seconds = time % 60;
-            document.getElementById('time').innerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        }
-
-        function startTimer() {
-            if (!isRunning) {
-                timer = setInterval(() => {
-                    if (time > 0) {
-                        time--;
-                        updateTimer();
-                    } else {
-                        clearInterval(timer);
-                        alert('Time\'s up!');
-                    }
-                }, 1000);
-                isRunning = true;
+            function updateTimer() {
+                const minutes = Math.floor(time / 60);
+                const seconds = time % 60;
+                document.getElementById('time').innerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
             }
-        }
 
-        function pauseTimer() {
-            if (isRunning) {
+            function startTimer() {
+                if (!isRunning) {
+                    timer = setInterval(() => {
+                        if (time > 0) {
+                            time--;
+                            updateTimer();
+                        } else {
+                            clearInterval(timer);
+                            alert('Time\'s up!');
+                        }
+                    }, 1000);
+                    isRunning = true;
+                }
+            }
+
+            function pauseTimer() {
+                if (isRunning) {
+                    clearInterval(timer);
+                    isRunning = false;
+                }
+            }
+
+            function resetTimer() {
                 clearInterval(timer);
+                time = 1500;
+                updateTimer();
                 isRunning = false;
             }
-        }
 
-        function resetTimer() {
-            clearInterval(timer);
-            time = 1500;
-            updateTimer();
-            isRunning = false;
-        }
+            startButton.addEventListener('click', startTimer);
+            pauseButton.addEventListener('click', pauseTimer);
+            resetButton.addEventListener('click', resetTimer);
 
-        startButton.addEventListener('click', startTimer);
-        pauseButton.addEventListener('click', pauseTimer);
-        resetButton.addEventListener('click', resetTimer);
+            updateTimer(); // Initialize the timer display
 
-        updateTimer(); // Initialize the timer display
+            // Drag and Drop Functionality
+            let draggedElement = null;
+            let draggedText = '';
 
-        // Drag and Drop Functionality
-        let draggedElement = null;
-        let draggedText = '';
+            function handleDragStart(e) {
+                // Get the text from the input field being dragged
+                draggedElement = e.target.querySelector('input[type="text"]');
+                draggedText = draggedElement.value;
+                e.target.classList.add('dragging');
+                e.dataTransfer.setData('text/plain', draggedText);
+            }
 
-        function handleDragStart(e) {
-            // Get the text from the input field being dragged
-            draggedElement = e.target.querySelector('input[type="text"]');
-            draggedText = draggedElement.value;
-            e.target.classList.add('dragging');
-            e.dataTransfer.setData('text/plain', draggedText);
-        }
+            function handleDragEnd(e) {
+                e.target.classList.remove('dragging');
+            }
 
-        function handleDragEnd(e) {
-            e.target.classList.remove('dragging');
-        }
+            function handleDrop(e) {
+                e.preventDefault();
+                const dropTarget = e.target.closest('.hourly-task, .task-item, .small-task-item');
 
-        function handleDrop(e) {
-            e.preventDefault();
-            const dropTarget = e.target.closest('.hourly-task, .task-item, .small-task-item');
-
-            if (dropTarget && draggedText) {
-                // Set the text of the target input field
-                const inputField = dropTarget.querySelector('input[type="text"]');
-                if (inputField) {
-                    inputField.value = draggedText;
-                    // Clear the text from the original field
-                    if (draggedElement) {
-                        draggedElement.value = '';
+                if (dropTarget && draggedText) {
+                    // Set the text of the target input field
+                    const inputField = dropTarget.querySelector('input[type="text"]');
+                    if (inputField) {
+                        inputField.value = draggedText;
+                        // Clear the text from the original field
+                        if (draggedElement) {
+                            draggedElement.value = '';
+                        }
                     }
+                    draggedText = '';
+                    draggedElement = null;
                 }
-                draggedText = '';
-                draggedElement = null;
             }
-        }
 
-        function handleDragOver(e) {
-            e.preventDefault();
-            e.target.classList.add('drop-target');
-        }
-
-        function handleDragLeave(e) {
-            e.target.classList.remove('drop-target');
-        }
-
-        document.querySelectorAll('.task-item, .small-task-item, .hourly-task').forEach(item => {
-            item.addEventListener('dragstart', handleDragStart);
-            item.addEventListener('dragend', handleDragEnd);
-        });
-
-        document.querySelectorAll('.task-form, .small-task-form, #hourly-tasks').forEach(form => {
-            form.addEventListener('dragover', handleDragOver);
-            form.addEventListener('dragleave', handleDragLeave);
-            form.addEventListener('drop', handleDrop);
-        });
-
-        // Function to dynamically add new task fields
-        document.getElementById('add-task-button').addEventListener('click', function () {
-            const taskForm = document.getElementById('task-form');
-            const newIndex = taskForm.querySelectorAll('.task-item').length;
-            const newTask = document.createElement('div');
-            newTask.classList.add('task-item');
-            newTask.setAttribute('draggable', 'true');
-            newTask.innerHTML = `
-                <input type="checkbox" name="task_new_${newIndex}">
-                <input type="text" name="title_new_${newIndex}" placeholder="New Task">
-            `;
-            newTask.addEventListener('dragstart', handleDragStart);
-            newTask.addEventListener('dragend', handleDragEnd);
-            taskForm.insertBefore(newTask, document.getElementById('add-task-button'));
-        });
-
-        // Store input value when pressing enter
-        function storeInput(event, input) {
-            if (event.key === 'Enter') {
-                input.setAttribute('value', input.value);
-                event.preventDefault(); // Prevents form submission
+            function handleDragOver(e) {
+                e.preventDefault();
+                e.target.classList.add('drop-target');
             }
-        }
+
+            function handleDragLeave(e) {
+                e.target.classList.remove('drop-target');
+            }
+
+            document.querySelectorAll('.task-item, .small-task-item, .hourly-task').forEach(item => {
+                item.addEventListener('dragstart', handleDragStart);
+                item.addEventListener('dragend', handleDragEnd);
+            });
+
+            document.querySelectorAll('.task-form, .small-task-form, #hourly-tasks').forEach(form => {
+                form.addEventListener('dragover', handleDragOver);
+                form.addEventListener('dragleave', handleDragLeave);
+                form.addEventListener('drop', handleDrop);
+            });
+
+            // Function to dynamically add new task fields
+            document.getElementById('add-task-button').addEventListener('click', function () {
+                const taskForm = document.getElementById('task-form');
+                const newIndex = taskForm.querySelectorAll('.task-item').length;
+                const newTask = document.createElement('div');
+                newTask.classList.add('task-item');
+                newTask.setAttribute('draggable', 'true');
+                newTask.innerHTML = `
+                    <input type="checkbox" name="task_new_${newIndex}">
+                    <input type="text" name="title_new_${newIndex}" placeholder="New Task">
+                `;
+                newTask.addEventListener('dragstart', handleDragStart);
+                newTask.addEventListener('dragend', handleDragEnd);
+                taskForm.insertBefore(newTask, document.getElementById('add-task-button'));
+            });
+
+            // Store input value when pressing enter
+            function storeInput(event, input) {
+                if (event.key === 'Enter') {
+                    input.setAttribute('value', input.value);
+                    event.preventDefault(); // Prevents form submission
+                }
+            }
+        });
     </script>
 </body>
 
