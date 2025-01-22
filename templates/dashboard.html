@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 
 <body>
@@ -56,9 +57,9 @@
                     <div class="timer-container">
                         <div class="timer" id="time">25:00</div>
                         <div class="timer-buttons">
-                            <button class="button start-button" id="start" aria-label="Start Timer">▶️</button>
-                            <button class="button pause-button" id="pause" aria-label="Pause Timer">⏸️</button>
-                            <button class="button reset-button" id="reset" aria-label="Reset Timer">⏹️</button>
+                            <button class="button start-button" id="start" aria-label="Start Timer"><i class="fas fa-play"></i></button>
+                            <button class="button pause-button" id="pause" aria-label="Pause Timer"><i class="fas fa-pause"></i></button>
+                            <button class="button reset-button" id="reset" aria-label="Reset Timer"><i class="fas fa-stop"></i></button>
                         </div>
                     </div>
                 </div>
