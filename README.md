@@ -41,7 +41,7 @@
 4. **Activate the virtual environment**: `source env/bin/activate` (Linux/Mac) or `.\env\Scripts\activate` (Windows)
 5. **Install the dependencies**: `pip install -r requirements.txt`
 6. **Run the application**: `flask run`
-7. **Access the application**: Open your web browser and navigate to `http://127.0.0.1:5000/`
+7. **Access the application**: Open your web browser and navigate to `https://supreme-broccoli-4gx49vr946xhq7gv-5000.app.github.dev/dashboard`
 
 ### Future Improvements:
 - **Collaboration Features**: Allow multiple users to collaborate on tasks.
