@@ -12,7 +12,7 @@ Project Tikk is a simple productivity tracking application designed to help indi
 - **Session Management**: Users remain logged in across sessions.
 
 ### 2. Daily Dashboard
-- **Date Display**: The dashboard contains a datebox that displays the current date and time prominently to help users stay oriented.
+- **Date Display**: The dashboard contains a datebox that displays the current date, day and time to help users stay oriented.
 - **To-Do List**: Users can create, edit, and manage their daily tasks. The to-do list is designed to be simple and intuitive.
 - **Pomodoro Timer**: A built-in Pomodoro timer helps users manage their time effectively by breaking work into intervals, traditionally 25 minutes in length, separated by short breaks.
 - **Hourly Fields**: Users can plan their day hour by hour, with fields available for each hour to input tasks and notes.
