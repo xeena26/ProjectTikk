@@ -194,12 +194,13 @@ footer {
 }
 
 .reset-button {
-    background-color: #F44336;
+    background-color: #B3372D;
 }
 
 .timer {
-    font-size: 60px;
+    font-size: 65px;
     margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 #bottom-row {
