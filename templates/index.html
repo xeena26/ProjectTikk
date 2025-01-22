@@ -4,20 +4,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daily Dashboard</title>
+    <title>{{ title }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .logo-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+    </style>
 </head>
 
-<body>
-    <h1>Daily Dashboard</h1>
-    <nav>
-        <ul>
-            <li><a href="{{ url_for('index') }}">Home</a></li>
-            <li><a href="{{ url_for('login') }}">Login</a></li>
-            <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
-        </ul>
-    </nav>
-    <!-- Add your HTML structure here -->
+<body class="bg-dark text-white d-flex align-items-center justify-content-center" style="height: 100vh;">
+    <div class="logo-container">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" style="width: 120px;">
+    </div>
+    <div class="card text-dark bg-light rounded-lg p-4" style="width: 400px;">
+        <h1 class="text-center">Login</h1>
+        <form method="POST" action="{{ url_for('login') }}">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.username.label(class_='form-label') }}
+                {{ form.username(class_='form-control', size=20) }}
+            </div>
+            <div class="form-group">
+                {{ form.password.label(class_='form-label') }}
+                {{ form.password(class_='form-control', size=20) }}
+            </div>
+            <div class="form-group text-center">
+                {{ form.submit(class_='btn btn-primary btn-block') }}
+            </div>
+        </form>
+        <div class="text-center">
+            <a href="{{ url_for('register') }}">Don't have an account? Register</a>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 
 </html>
