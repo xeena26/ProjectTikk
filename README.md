@@ -8,8 +8,8 @@ Project Tikk is a simple productivity tracking application designed to help indi
 ## Features and Functionalities
 
 ### 1. User Authentication
-- **User Registration and Login**: Users can register and log in securely. User authentication is implemented using Flask and SQLite, ensuring that users' data is secure and persistent.
-- **Session Management**: Users remain logged in across sessions, providing a seamless experience without the need to log in repeatedly.
+- **User Registration and Login**: Users can register and log in securely. User authentication is implemented using Flask and SQLite, no format requirement username or password was implemented.
+- **Session Management**: Users remain logged in across sessions.
 
 ### 2. Daily Dashboard
 - **Date Display**: The dashboard displays the current date prominently to help users stay oriented.
