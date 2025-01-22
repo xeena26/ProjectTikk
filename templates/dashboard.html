@@ -16,9 +16,7 @@
         }
 
         .task-item,
-        .small-task-item,
-        .brain-dump-item,
-        .for-tomorrow-item {
+        .small-task-item {
             display: flex;
             align-items: center;
             font-size: 12px;
@@ -26,9 +24,7 @@
         }
 
         .task-item input[type="text"],
-        .small-task-item input[type="text"],
-        .brain-dump-item input[type="text"],
-        .for-tomorrow-item input[type="text"] {
+        .small-task-item input[type="text"] {
             font-size: 12px;
             padding: 2px;
             margin-left: 2px;
@@ -205,33 +201,8 @@
                     </div>
                 </section>
             </section>
-
-            <div class="side-by-side">
-                <section id="brain-dump" class="card brain-dump-form">
-                    <h2>Brain Dump</h2>
-                    <form id="brain-dump-form">
-                        {% for i in range(3) %}
-                        <div class="brain-dump-item">
-                            <input type="text" name="brain_dump_{{ i }}" placeholder="New Idea">
-                        </div>
-                        {% endfor %}
-                    </form>
-                </section>
-
-                <section id="for-tomorrow" class="card for-tomorrow-form">
-                    <h2>For Tomorrow</h2>
-                    <form id="for-tomorrow-form">
-                        {% for i in range(3) %}
-                        <div class="for-tomorrow-item">
-                            <input type="text" name="for_tomorrow_{{ i }}" placeholder="New Task">
-                        </div>
-                        {% endfor %}
-                    </form>
-                </section>
-            </div>
         </section>
     </main>
-
     <footer>
         &copy; 2024 Tikk. All rights reserved.
     </footer>
@@ -269,8 +240,11 @@
                     }
                     if (hour === currentHour) {
                         input.classList.add('highlight');
+                    } else if (hour < currentHour) {
+                        input.classList.add('past-hour');
                     } else {
                         input.classList.remove('highlight');
+                        input.classList.remove('past-hour');
                     }
                 });
             }
@@ -348,15 +322,15 @@
 
             function handleDrop(e) {
                 e.preventDefault();
-                const dropTarget = e.target.closest('.hourly-task, .task-item, .small-task-item, .brain-dump-item, .for-tomorrow-item');
+                const dropTarget = e.target.closest('.hourly-task, .task-item, .small-task-item');
 
                 if (dropTarget && draggedText) {
                     // Set the text of the target input field
                     const inputField = dropTarget.querySelector('input[type="text"]');
                     if (inputField) {
                         inputField.value = draggedText;
-                        // Clear the text from the original field
-                        if (draggedElement) {
+                        // Clear the text from the original field if it's not from Other Tasks
+                        if (draggedElement && !draggedElement.closest('.task-box')) {
                             draggedElement.value = '';
                         }
                     }
@@ -374,12 +348,12 @@
                 e.target.classList.remove('drop-target');
             }
 
-            document.querySelectorAll('.task-item, .small-task-item, .hourly-task, .brain-dump-item, .for-tomorrow-item').forEach(item => {
+            document.querySelectorAll('.task-item, .small-task-item, .hourly-task').forEach(item => {
                 item.addEventListener('dragstart', handleDragStart);
                 item.addEventListener('dragend', handleDragEnd);
             });
 
-            document.querySelectorAll('.task-form, .small-task-form, #hourly-tasks, #brain-dump-form, #for-tomorrow-form').forEach(form => {
+            document.querySelectorAll('.task-form, .small-task-form, #hourly-tasks').forEach(form => {
                 form.addEventListener('dragover', handleDragOver);
                 form.addEventListener('dragleave', handleDragLeave);
                 form.addEventListener('drop', handleDrop);

@@ -225,6 +225,11 @@ footer {
     color: #000;
 }
 
+#hourly-todo-container .past-hour {
+    background-color: #555555;
+    color: #999999;
+}
+
 #other-tasks-container {
     width: 68%;
     background-color: #1f1f1f;
