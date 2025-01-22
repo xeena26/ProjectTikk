@@ -16,20 +16,22 @@ body {
     align-items: center;
 }
 
+.navbar-logo, .navbar-links a, h1 {
+    color: #81C2A6;
+}
+
 .navbar-logo {
     font-size: 24px;
     font-weight: bold;
-    color: #81C2A6; /* Updated */
 }
 
 .navbar-links a {
-    color: #81C2A6; /* Updated */
     padding: 10px 15px;
     text-decoration: none;
     font-size: 16px;
 }
 
-.navbar-links a:hover {
+.navbar-links a:hover, a:hover {
     color: #C6C6C6;
 }
 
@@ -38,7 +40,7 @@ h1 {
     margin-top: 20px;
     font-size: 24px;
     font-weight: 600;
-    color: #3E5D4F; /* Updated */
+    color: #3E5D4F;
 }
 
 .container {
@@ -170,31 +172,23 @@ footer {
 
 .button {
     font-size: 20px;
-    padding: 10px 10px;
+    padding: 10px 20px;
     border: none;
     border-radius: 10px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: black;
-    background: none;
+    background-color: black; /* Set background to black */
+    color: white; /* Set text color to white */
+}
+
+.button:hover {
+    background-color: #333; /* Slightly lighter black for hover effect */
 }
 
 .button svg {
-    color: black;
-}
-
-.start-button {
-    background-color: #3C8E3F;
-}
-
-.pause-button {
-    background-color: #FFC107;
-}
-
-.reset-button {
-    background-color: #B3372D;
+    color: white; /* Ensure SVG color is white */
 }
 
 .timer {
@@ -222,7 +216,7 @@ footer {
 }
 
 #hourly-todo-container .highlight {
-    background-color: #A0EECC; /* Updated */
+    background-color: #A0EECC;
     color: #000;
 }
 
@@ -305,12 +299,12 @@ footer {
 }
 
 .drop-target {
-    border: 2px dashed #A0EECC; /* Updated */
+    border: 2px dashed #A0EECC;
 }
 
 .card .card-header {
     background-color: #1f1f1f;
-    color: #A0EECC; /* Updated */
+    color: #A0EECC;
     border-bottom: 1px solid #424242;
 }
 
@@ -324,8 +318,8 @@ footer {
 }
 
 .btn-primary {
-    background-color: #83C2A7; /* Updated */
-    border-color: #83C2A7; /* Updated */
+    background-color: #83C2A7;
+    border-color: #83C2A7;
 }
 
 .btn-primary:hover {
@@ -334,7 +328,7 @@ footer {
 }
 
 a {
-    color: #A0EECC; /* Updated */
+    color: #A0EECC;
 }
 
 a:hover {
@@ -352,7 +346,7 @@ a:hover {
 }
 
 #login-form h1 {
-    color: #2D4239; /* Updated */
+    color: #2D4239;
 }
 
 #login-form .form-group {
@@ -367,16 +361,15 @@ a:hover {
 
 #login-form .btn-primary {
     width: 100%;
-    background-color: #2D4239; /* Updated */
-    border-color: #2D4239; /* Updated */
+    background-color: #2D4239;
+    border-color: #2D4239;
 }
 
 #login-form .btn-primary:hover {
-    background-color: #1f3028; /* Slightly darker shade for hover effect */
+    background-color: #1f3028;
     border-color: #1f3028;
 }
 
-/* Specific for task-form and small-task-form */
 .task-form,
 .small-task-form {
     max-height: 200px;
@@ -384,7 +377,6 @@ a:hover {
     transition: overflow-y 0.2s ease-in-out;
 }
 
-/* Specific for editable-title */
 .editable-title {
     border: 1px dashed transparent;
 }
@@ -393,7 +385,6 @@ a:hover {
     border: 1px solid #000;
 }
 
-/* Custom Scroll Bar */
 .task-form::-webkit-scrollbar,
 .small-task-form::-webkit-scrollbar {
     width: 8px;
@@ -420,7 +411,6 @@ a:hover {
     display: none;
 }
 
-/* Firefox */
 .task-form,
 .small-task-form {
     scrollbar-width: thin;
@@ -431,5 +421,3 @@ a:hover {
 .small-task-form::-webkit-scrollbar-corner {
     background: transparent;
 }
-
-/* Removed calendar-related styles */
