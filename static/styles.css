@@ -2,13 +2,13 @@ body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #121212;
+    background-color: #777877;
     color: #e0e0e0;
     height: 100vh;
 }
 
 .navbar {
-    background-color: #1f1f1f;
+    background-color: #313232;
     padding: 10px 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     display: flex;
@@ -19,18 +19,18 @@ body {
 .navbar-logo {
     font-size: 24px;
     font-weight: bold;
-    color: #bb86fc;
+    color: #81C2A6; /* Updated */
 }
 
 .navbar-links a {
-    color: #bb86fc;
+    color: #81C2A6; /* Updated */
     padding: 10px 15px;
     text-decoration: none;
     font-size: 16px;
 }
 
 .navbar-links a:hover {
-    color: #3700b3;
+    color: #C6C6C6;
 }
 
 h1 {
@@ -38,7 +38,7 @@ h1 {
     margin-top: 20px;
     font-size: 24px;
     font-weight: 600;
-    color: #bb86fc;
+    color: #3E5D4F; /* Updated */
 }
 
 .container {
@@ -221,7 +221,7 @@ footer {
 }
 
 #hourly-todo-container .highlight {
-    background-color: #bb86fc;
+    background-color: #A0EECC; /* Updated */
     color: #000;
 }
 
@@ -304,7 +304,7 @@ footer {
 }
 
 .drop-target {
-    border: 2px dashed #bb86fc;
+    border: 2px dashed #A0EECC; /* Updated */
 }
 
 #calendar {
@@ -319,7 +319,7 @@ footer {
 
 .card .card-header {
     background-color: #1f1f1f;
-    color: #bb86fc;
+    color: #A0EECC; /* Updated */
     border-bottom: 1px solid #424242;
 }
 
@@ -333,8 +333,8 @@ footer {
 }
 
 .btn-primary {
-    background-color: #6200ea;
-    border-color: #6200ea;
+    background-color: #A0EECC; /* Updated */
+    border-color: #A0EECC; /* Updated */
 }
 
 .btn-primary:hover {
@@ -343,7 +343,7 @@ footer {
 }
 
 a {
-    color: #bb86fc;
+    color: #A0EECC; /* Updated */
 }
 
 a:hover {
@@ -361,7 +361,7 @@ a:hover {
 }
 
 #login-form h1 {
-    color: #bb86fc;
+    color: #2D4239; /* Updated */
 }
 
 #login-form .form-group {
@@ -376,4 +376,102 @@ a:hover {
 
 #login-form .btn-primary {
     width: 100%;
+    background-color: #2D4239; /* Updated */
+    border-color: #2D4239; /* Updated */
+}
+
+#login-form .btn-primary:hover {
+    background-color: #1f3028; /* Slightly darker shade for hover effect */
+    border-color: #1f3028;
+}
+
+/* Specific for task-form and small-task-form */
+.task-form,
+.small-task-form {
+    max-height: 200px;
+    overflow-y: hidden;
+    transition: overflow-y 0.2s ease-in-out;
+}
+
+/* Specific for editable-title */
+.editable-title {
+    border: 1px dashed transparent;
+}
+
+.editable-title[contenteditable="true"]:focus {
+    border: 1px solid #000;
+}
+
+/* Custom Scroll Bar */
+.task-form::-webkit-scrollbar,
+.small-task-form::-webkit-scrollbar {
+    width: 8px;
+}
+
+.task-form::-webkit-scrollbar-track,
+.small-task-form::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.task-form::-webkit-scrollbar-thumb,
+.small-task-form::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 8px;
+}
+
+.task-form::-webkit-scrollbar-thumb:hover,
+.small-task-form::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.task-form::-webkit-scrollbar-button,
+.small-task-form::-webkit-scrollbar-button {
+    display: none;
+}
+
+/* Firefox */
+.task-form,
+.small-task-form {
+    scrollbar-width: thin;
+    scrollbar-color: #888 transparent;
+}
+
+.task-form,
+.small-task-form::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
+/* Registration form styles */
+#register-form {
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+    background-color: #1f1f1f;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+#register-form h1 {
+    color: #2D4239; /* Updated */
+}
+
+#register-form .form-group {
+    margin-bottom: 20px;
+}
+
+#register-form .form-control {
+    background-color: #333;
+    border: 1px solid #424242;
+    color: #e0e0e0;
+}
+
+#register-form .btn-primary {
+    width: 100%;
+    background-color: #2D4239; /* Updated */
+    border-color: #2D4239; /* Updated */
+}
+
+#register-form .btn-primary:hover {
+    background-color: #1f3028; /* Slightly darker shade for hover effect */
+    border-color: #1f3028;
 }

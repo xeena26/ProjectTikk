@@ -6,116 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <style>
-        /* Updated CSS */
-        .task-form,
-        .small-task-form {
-            max-height: 200px;
-            overflow-y: hidden;
-            transition: overflow-y 0.2s ease-in-out;
-        }
-
-        .task-item,
-        .small-task-item {
-            display: flex;
-            align-items: center;
-            font-size: 12px;
-            margin-bottom: 2px;
-        }
-
-        .task-item input[type="text"],
-        .small-task-item input[type="text"] {
-            font-size: 12px;
-            padding: 2px;
-            margin-left: 2px;
-            margin-right: 2px;
-            flex: 1;
-            height: 20px;
-        }
-
-        .task-item input[type="checkbox"],
-        .small-task-item input[type="checkbox"] {
-            transform: scale(0.8);
-        }
-
-        .completed {
-            text-decoration: line-through;
-        }
-
-        #add-task-button,
-        .add-small-task-button {
-            font-size: 12px;
-            padding: 4px 8px;
-            margin-top: 5px;
-            display: block;
-        }
-
-        .editable-title {
-            border: 1px dashed transparent;
-        }
-
-        .editable-title[contenteditable="true"]:focus {
-            border: 1px solid #000;
-        }
-
-        /* Custom Scroll Bar */
-        .task-form::-webkit-scrollbar,
-        .small-task-form::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .task-form::-webkit-scrollbar-track,
-        .small-task-form::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .task-form::-webkit-scrollbar-thumb,
-        .small-task-form::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 8px;
-        }
-
-        .task-form::-webkit-scrollbar-thumb:hover,
-        .small-task-form::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        }
-
-        .task-form::-webkit-scrollbar-button,
-        .small-task-form::-webkit-scrollbar-button {
-            display: none;
-        }
-
-        /* Firefox */
-        .task-form,
-        .small-task-form {
-            scrollbar-width: thin;
-            scrollbar-color: #888 transparent;
-        }
-
-        .task-form,
-        .small-task-form::-webkit-scrollbar-corner {
-            background: transparent;
-        }
-
-        .side-by-side {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-            /* Small gap between the containers */
-        }
-
-        .brain-dump-form,
-        .for-tomorrow-form {
-            width: calc(50% - 5px);
-            /* Each container takes half the width minus half of the gap */
-        }
-    </style>
 </head>
 
 <body>
     <header>
         <nav class="navbar">
-            <div class="navbar-logo">Tikk</div>
+            <div class="navbar-logo">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Tikk Logo" style="height: 40px; width: 160px;">
+            </div>
             <div class="navbar-links">
                 <a href="{{ url_for('calendar') }}">Calendar</a>
                 <a href="{{ url_for('logout') }}">Logout</a>
@@ -124,7 +22,7 @@
     </header>
 
     <main class="container">
-        <h1>Dashboard</h1>
+        <h1></h1>
         <section id="main-content">
             <section id="top-row" class="row">
                 <div id="date-box" class="card">
@@ -204,7 +102,7 @@
         </section>
     </main>
     <footer>
-        &copy; 2024 Tikk. All rights reserved.
+        &copy; 2025 Tikk. All rights reserved.
     </footer>
 
     <script>
