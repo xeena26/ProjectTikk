@@ -3,7 +3,7 @@
 #### Video Demo: [URL HERE]
 #### Description:
 
-Project Tikk is a simple productivity tracking application designed to help individuals, manage their daily tasks and activities efficiently from a simple dashboard. Built using Flask and SQLite for local development, it offers a user-friendly interface and tools for improving productivity. The project is version-controlled using GitHub and is currently hosted on CS50 Codespace.
+Project Tikk is a simple productivity tracking application designed to help individuals, manage their daily tasks and activities efficiently from a simple dashboard while keeping track of time. Built using Flask and SQLite for local development, it offers a user-friendly interface and tools for improving productivity. The project is version-controlled using GitHub and is currently hosted on CS50 Codespace.
 
 ## Features and Functionalities
 
@@ -13,7 +13,8 @@ Project Tikk is a simple productivity tracking application designed to help indi
 
 ### 2. Daily Dashboard
 - **Date Display**: The dashboard contains a datebox that displays the current date, day and time to help users stay oriented.
-- **To-Do List**: Users can create, edit, and manage their daily tasks. The to-do list is designed to be simple and intuitive.
+- **To-Do List**: Users can create, edit, and manage their daily tasks. The to-do list is designed to be simple and intuitive, to just drop tasks in the middle of the day before sorting or scheduling them.
+- **Categorised To-Do List**: Users can categorise their daily tasks into different categories by changing the name of the categories from the dashboard. They can drag and drop tasks to other fields to sort and schedule.
 - **Pomodoro Timer**: A built-in Pomodoro timer helps users manage their time effectively by breaking work into intervals, traditionally 25 minutes in length, separated by short breaks.
 - **Hourly Fields**: Users can plan their day hour by hour, with fields available for each hour to input tasks and notes.
 
