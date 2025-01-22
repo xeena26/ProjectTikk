@@ -67,7 +67,7 @@ def register():
         db.session.commit()
         flash('Your account has been created!', 'success')
         return redirect(url_for('login'))
-    
+
     users = User.query.all()
     print(users)
 
@@ -91,16 +91,16 @@ def add_task():
     task_due_date = request.form['due_date']
     task_priority = request.form['priority']
     new_task = Task(
-        title=task_title, 
-        category=task_category, 
-        due_date=datetime.strptime(task_due_date, '%Y-%m-%d') if task_due_date else None, 
+        title=task_title,
+        category=task_category,
+        due_date=datetime.strptime(task_due_date, '%Y-%m-%d') if task_due_date else None,
         priority=task_priority,
         user_id=current_user.id
     )
     db.session.add(new_task)
     db.session.commit()
     flash('Task added successfully!', 'success')
-    
+
     tasks = Task.query.filter_by(user_id=current_user.id).all()
     return render_template('task_list.html', tasks=tasks)
 
