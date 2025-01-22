@@ -7,13 +7,20 @@
     <title>Register</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .logo-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+    </style>
 </head>
 
 <body class="bg-dark text-white d-flex align-items-center justify-content-center" style="height: 100vh;">
+    <div class="logo-container">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" style="width: 120px;">
+    </div>
     <div class="card text-dark bg-light rounded-lg p-4" style="width: 400px;">
-        <div class="text-center mb-4">
-            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" style="width: 120px;">
-        </div>
         <h1 class="text-center">Register</h1>
         <form method="POST" action="{{ url_for('register') }}">
             {{ form.hidden_tag() }}
