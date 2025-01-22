@@ -129,7 +129,7 @@ footer {
 .task-item, .small-task-item {
     background-color: #565756;
     border: 1px solid #424242;
-    padding: 10px;
+    padding: 5px;
     margin-bottom: 10px;
     border-radius: 5px;
     cursor: grab;
