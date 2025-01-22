@@ -4,6 +4,7 @@ from flask_login import LoginManager, UserMixin, login_user, current_user, logou
 from flask_migrate import Migrate
 from forms import RegistrationForm, LoginForm
 from werkzeug.security import generate_password_hash, check_password_hash
+import joblib
 from datetime import datetime  # Import to handle date-time
 
 app = Flask(__name__)
@@ -86,9 +87,9 @@ def logout():
 @login_required
 def add_task():
     task_title = request.form['title']
-    task_category = request.form.get('category')
-    task_due_date = request.form.get('due_date')
-    task_priority = request.form.get('priority')
+    task_category = request.form['category']
+    task_due_date = request.form['due_date']
+    task_priority = request.form['priority']
     new_task = Task(
         title=task_title,
         category=task_category,
@@ -98,23 +99,41 @@ def add_task():
     )
     db.session.add(new_task)
     db.session.commit()
-    return jsonify({"status": "success", "task": {"id": new_task.id, "title": new_task.title}})
+    flash('Task added successfully!', 'success')
 
-@app.route('/update_task', methods=['POST'])
+    tasks = Task.query.filter_by(user_id=current_user.id).all()
+    return render_template('task_list.html', tasks=tasks)
+
+@app.route('/edit_task/<int:task_id>', methods=['POST'])
 @login_required
-def update_task():
-    task_id = request.form['id']
+def edit_task(task_id):
     task = Task.query.get_or_404(task_id)
     task.title = request.form['title']
-    task.completed = request.form.get('completed') == 'true'
+    task.category = request.form['category']
+    task.due_date = datetime.strptime(request.form['due_date'], '%Y-%m-%d') if request.form['due_date'] else task.due_date
+    task.priority = request.form['priority']
     db.session.commit()
-    return jsonify({"status": "success"})
+    flash('Task updated successfully!', 'success')
+    return redirect(url_for('dashboard'))
 
 @app.route('/delete_task/<int:task_id>', methods=['POST'])
 @login_required
 def delete_task(task_id):
     task = Task.query.get_or_404(task_id)
     db.session.delete(task)
+    db.session.commit()
+    flash('Task deleted successfully!', 'success')
+    return redirect(url_for('dashboard'))
+
+@app.route('/update_tasks', methods=['POST'])
+@login_required
+def update_tasks():
+    updated_tasks = request.json.get('tasks')
+    for updated_task in updated_tasks:
+        task = Task.query.get(updated_task['id'])
+        if task and task.user_id == current_user.id:
+            task.title = updated_task['title']
+            task.completed = updated_task['completed']
     db.session.commit()
     return jsonify({"status": "success"})
 
