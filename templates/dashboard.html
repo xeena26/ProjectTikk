@@ -134,23 +134,13 @@
                 </div>
                 <div id="todo-list" class="card">
                     <h2>To-Do List</h2>
-                    <form id="task-form" action="{{ url_for('add_task') }}" method="POST" class="task-form">
-                        {% if tasks %}
+                    <form id="task-form" class="task-form">
                         {% for task in tasks %}
                         <div class="task-item" draggable="true" data-id="{{ task.id }}">
-                            <input type="checkbox" name="task_{{ task.id }}" {% if task.completed %}checked{% endif %}>
-                            <input type="text" name="title_{{ task.id }}" value="{{ task.title }}"
-                                placeholder="New Task">
+                            <input type="checkbox" name="task_{{ task.id }}" {% if task.completed %}checked{% endif %} onchange="updateTask({{ task.id }})">
+                            <input type="text" name="title_{{ task.id }}" value="{{ task.title }}" placeholder="New Task" onblur="updateTask({{ task.id }})">
                         </div>
                         {% endfor %}
-                        {% else %}
-                        {% for i in range(3) %}
-                        <div class="task-item" draggable="true">
-                            <input type="checkbox" name="task_new_{{ i }}">
-                            <input type="text" name="title_new_{{ i }}" placeholder="New Task">
-                        </div>
-                        {% endfor %}
-                        {% endif %}
                         <button type="button" id="add-task-button">+</button>
                     </form>
                 </div>
@@ -304,61 +294,6 @@
 
             updateTimer(); // Initialize the timer display
 
-            // Drag and Drop Functionality
-            let draggedElement = null;
-            let draggedText = '';
-
-            function handleDragStart(e) {
-                // Get the text from the input field being dragged
-                draggedElement = e.target.querySelector('input[type="text"]');
-                draggedText = draggedElement.value;
-                e.target.classList.add('dragging');
-                e.dataTransfer.setData('text/plain', draggedText);
-            }
-
-            function handleDragEnd(e) {
-                e.target.classList.remove('dragging');
-            }
-
-            function handleDrop(e) {
-                e.preventDefault();
-                const dropTarget = e.target.closest('.hourly-task, .task-item, .small-task-item');
-
-                if (dropTarget && draggedText) {
-                    // Set the text of the target input field
-                    const inputField = dropTarget.querySelector('input[type="text"]');
-                    if (inputField) {
-                        inputField.value = draggedText;
-                        // Clear the text from the original field if it's not from Other Tasks
-                        if (draggedElement && !draggedElement.closest('.task-box')) {
-                            draggedElement.value = '';
-                        }
-                    }
-                    draggedText = '';
-                    draggedElement = null;
-                }
-            }
-
-            function handleDragOver(e) {
-                e.preventDefault();
-                e.target.classList.add('drop-target');
-            }
-
-            function handleDragLeave(e) {
-                e.target.classList.remove('drop-target');
-            }
-
-            document.querySelectorAll('.task-item, .small-task-item, .hourly-task').forEach(item => {
-                item.addEventListener('dragstart', handleDragStart);
-                item.addEventListener('dragend', handleDragEnd);
-            });
-
-            document.querySelectorAll('.task-form, .small-task-form, #hourly-tasks').forEach(form => {
-                form.addEventListener('dragover', handleDragOver);
-                form.addEventListener('dragleave', handleDragLeave);
-                form.addEventListener('drop', handleDrop);
-            });
-
             // Function to dynamically add new task fields
             document.getElementById('add-task-button').addEventListener('click', function () {
                 const taskForm = document.getElementById('task-form');
@@ -367,25 +302,69 @@
                 newTask.classList.add('task-item');
                 newTask.setAttribute('draggable', 'true');
                 newTask.innerHTML = `
-                    <input type="checkbox" name="task_new_${newIndex}">
-                    <input type="text" name="title_new_${newIndex}" placeholder="New Task">
+                    <input type="checkbox" name="task_new_${newIndex}" onchange="saveTask(this)">
+                    <input type="text" name="title_new_${newIndex}" placeholder="New Task" onblur="saveTask(this)">
                 `;
-                newTask.addEventListener('dragstart', handleDragStart);
-                newTask.addEventListener('dragend', handleDragEnd);
                 taskForm.insertBefore(newTask, document.getElementById('add-task-button'));
-
                 // Enable scrollbar if more than 3 items
                 if (newIndex >= 3) {
                     taskForm.style.overflowY = 'auto';
                 }
             });
 
-            // Store input value when pressing enter
-            function storeInput(event, input) {
-                if (event.key === 'Enter') {
-                    input.setAttribute('value', input.value);
-                    event.preventDefault(); // Prevents form submission
-                }
+            // Function to save a task
+            function saveTask(element) {
+                const taskItem = element.closest('.task-item');
+                const taskId = taskItem.getAttribute('data-id');
+                const title = taskItem.querySelector('input[type="text"]').value;
+                const completed = taskItem.querySelector('input[type="checkbox"]').checked;
+
+                fetch('/add_task', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        id: taskId,
+                        title: title,
+                        completed: completed,
+                    }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            taskItem.setAttribute('data-id', data.task.id);
+                        } else {
+                            console.error('Error saving task:', data);
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+
+            // Function to update a task
+            function updateTask(taskId) {
+                const taskItem = document.querySelector(`.task-item[data-id='${taskId}']`);
+                const title = taskItem.querySelector('input[type="text"]').value;
+                const completed = taskItem.querySelector('input[type="checkbox"]').checked;
+
+                fetch('/update_task', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        id: taskId,
+                        title: title,
+                        completed: completed,
+                    }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status !== 'success') {
+                            console.error('Error updating task:', data);
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
             }
 
             // Editable Titles
@@ -400,57 +379,6 @@
                 // Save title to localStorage on blur
                 title.addEventListener('blur', function () {
                     localStorage.setItem(`title-${index}`, title.textContent);
-                });
-            });
-
-            // Checkbox functionality to strikethrough text and move item to the end
-            function handleCheckboxChange(checkbox) {
-                const taskItem = checkbox.parentElement;
-                const textInput = taskItem.querySelector('input[type="text"]');
-                if (checkbox.checked) {
-                    textInput.classList.add('completed');
-                    taskItem.parentElement.appendChild(taskItem); // Move to end of list
-                } else {
-                    textInput.classList.remove('completed');
-                    taskItem.parentElement.insertBefore(taskItem, taskItem.parentElement.firstChild); // Move to start of list
-                }
-            }
-
-            // Apply to checkboxes under To-Do List
-            document.querySelectorAll('.task-item input[type="checkbox"]').forEach(checkbox => {
-                checkbox.addEventListener('change', function () {
-                    handleCheckboxChange(checkbox);
-                });
-            });
-
-            // Apply to checkboxes under Other Tasks
-            document.querySelectorAll('.small-task-item input[type="checkbox"]').forEach(checkbox => {
-                checkbox.addEventListener('change', function () {
-                    handleCheckboxChange(checkbox);
-                });
-            });
-
-            // Function to dynamically add new sub-task fields under Other Tasks
-            document.querySelectorAll('.add-small-task-button').forEach(button => {
-                button.addEventListener('click', function () {
-                    const taskBox = button.closest('.task-box');
-                    const form = taskBox.querySelector('.small-task-form');
-                    const newIndex = form.querySelectorAll('.small-task-item').length;
-                    const taskBoxIndex = taskBox.getAttribute('data-index');
-                    const newSubTask = document.createElement('div');
-                    newSubTask.classList.add('small-task-item');
-                    newSubTask.setAttribute('draggable', 'true');
-                    newSubTask.setAttribute('data-id', `${taskBoxIndex}-${newIndex}`);
-                    newSubTask.innerHTML = `
-                        <input type="checkbox" name="small_task_${taskBoxIndex}_${newIndex}">
-                        <input type="text" name="small_title_${taskBoxIndex}_${newIndex}" placeholder="Sub-task ${newIndex + 1}">
-                    `;
-                    form.insertBefore(newSubTask, button);
-
-                    // Enable scrollbar if more than 3 items
-                    if (newIndex >= 3) {
-                        form.style.overflowY = 'auto';
-                    }
                 });
             });
         });
