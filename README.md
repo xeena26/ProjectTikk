@@ -38,7 +38,7 @@ The files and folders under the project are listed below:
 - **requirements.txt**: Contains a list of requirements to run the project.
 
 ### Templates
-- **templates/index.html**: The landing page, which redirects users to the login page.
+- **templates/index.html**: The landing page, lists all the pages within the directory.
 - **templates/login.html**: The login page where users can enter their credentials to access the dashboard.
 - **templates/dashboard.html**: The main dashboard page displaying the daily dashboard with the date, to-do list, Pomodoro timer, and hourly fields.
 - **templates/register.html**: The registration page where new users can create an account.
